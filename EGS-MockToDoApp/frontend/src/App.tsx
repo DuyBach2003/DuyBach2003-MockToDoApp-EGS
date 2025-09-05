@@ -74,7 +74,16 @@ function App() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (newTodo.trim() === "") return;
+    if (newTodo.trim() === ""){
+      alert('Task title is required.')
+      return;
+    }
+    for(const todo of todos){
+      if(newTodo.trim() === todo.title){
+        alert('Task title already exists.');
+        return;
+      }
+    }
 
     if (editingId === null) {
       addTodo();
