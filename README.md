@@ -1,6 +1,6 @@
 Steps to run the project: 
 
-Step 1: Clone the repository (git clone https://github.com/DuyBach2003/MockToDoApp-EGS.git) 
+Step 1: Clone the repository (git clone https://github.com/DuyBach2003/DuyBach2003-MockToDoApp-EGS.git) 
 
 Step 2: Install dependencies using npm install 
 
