@@ -1,6 +1,6 @@
 Steps to run the project: 
 
-Step 1: Clone the repository (git clone https://github.com/DuyBach2003/MockToDoApp-EGS.git) 
+Step 1: Clone the repository (git clone https://github.com/DuyBach2003/DuyBach2003-MockToDoApp-EGS.git) 
 
 Step 2: Install dependencies using npm install 
 
@@ -13,7 +13,7 @@ GRANT ALL PRIVILEGES ON DATABASE "mockToDoApp" TO postgres;
 - Create the todos table:
 CREATE TABLE todos (
     id BIGINT PRIMARY KEY,
-    title VARCHAR(255) NOT NULL
+    title VARCHAR(255) NOT NULL UNIQUE
 );
 
 Step 4: Run the backend and frontend servers:
