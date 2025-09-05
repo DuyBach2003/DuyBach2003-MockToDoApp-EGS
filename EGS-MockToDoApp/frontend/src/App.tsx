@@ -107,7 +107,7 @@ function App() {
           type="text"
           value={newTodo}
           onChange={(e) => setNewTodo(e.target.value)}
-          placeholder="Enter new task"
+          placeholder= {editingId === null ? "Enter new task" : "Update task title"}
           className="input"
         />
         <button type="submit" className="add-btn">
