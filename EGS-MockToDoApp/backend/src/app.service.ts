@@ -17,7 +17,7 @@ export class AppService {
 
   create(id: number, title: string) {
     const task = this.taskRepository.create({ id, title });
-    this.logger.log(`Task ${title} created successfully`);
+    this.logger.log(`Task named ${title} created successfully`);
     return this.taskRepository.save(task);
   }
   async update(id: number, title: string) {
@@ -27,12 +27,12 @@ export class AppService {
       throw new NotFoundException('Task not found');
     }
     task.title = title;
-    this.logger.log(`Task ${title} updated successfully`);
+    this.logger.log(`Task named ${title} updated successfully`);
     return this.taskRepository.save(task);
   }
 
-  async remove(id: number) {
+  async remove(id: number, title: string) {
     await this.taskRepository.delete(id);
-    this.logger.log(`Task ${id} removed successfully`);
+    this.logger.log(`Task named ${title} removed successfully`);
   }
 }

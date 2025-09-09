@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 import { IsInt, IsNotEmpty, IsString, Min, Max } from 'class-validator';
-export class CreateUpdateTaskDto {
+export class CUDTaskDto {
   @IsNotEmpty()
   @IsInt()
   @Min(Number.MIN_SAFE_INTEGER)

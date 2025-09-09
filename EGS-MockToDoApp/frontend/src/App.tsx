@@ -38,11 +38,12 @@ function App() {
     }
   };
 
-  const removeTodo = async (id: number) => {
+  const removeTodo = async (id: number, title: string) => {
     try {
-      const res = await fetch(`http://localhost:4000/v1/${id}`, {
+      const res = await fetch(`http://localhost:4000/v1`, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: Number(id), title: title })
       });
       if (!res.ok) {
         throw new Error('Failed to delete todo');
@@ -123,7 +124,7 @@ function App() {
               <button onClick={() => updateTodo(todo.id, todo.title)} className="update-btn">
                 Update
               </button>
-              <button onClick={() => removeTodo(todo.id)} className="remove-btn">
+              <button onClick={() => removeTodo(todo.id, todo.title)} className="remove-btn">
                 X
               </button>
             </div>

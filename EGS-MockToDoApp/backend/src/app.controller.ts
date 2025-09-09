@@ -7,15 +7,13 @@ import {
   Delete,
   Get,
   Logger,
-  Param,
   Patch,
   Post,
   ValidationPipe,
 } from '@nestjs/common';
 import { AppService } from './app.service';
 import { Task } from './task.entity';
-import { CreateUpdateTaskDto } from './dto/create-update-task.dto';
-import { RemoveTaskDto } from './dto/remove-task.dto';
+import { CUDTaskDto } from './dto/create-update-delete-task.dto';
 
 @Controller({ version: '1' })
 export class AppController {
@@ -28,27 +26,21 @@ export class AppController {
     return this.appService.findAll();
   }
   @Post()
-  async create(
-    @Body(new ValidationPipe()) body: CreateUpdateTaskDto,
-  ): Promise<Task[]> {
+  async create(@Body(new ValidationPipe()) body: CUDTaskDto): Promise<Task[]> {
     await this.appService.create(body.id, body.title);
-    this.logger.log(`POST / called with body: ${body}`);
+    this.logger.log('POST / called with body:', JSON.stringify(body));
     return this.appService.findAll();
   }
   @Patch()
-  async update(
-    @Body(new ValidationPipe()) body: CreateUpdateTaskDto,
-  ): Promise<Task[]> {
+  async update(@Body(new ValidationPipe()) body: CUDTaskDto): Promise<Task[]> {
     await this.appService.update(body.id, body.title);
-    this.logger.log(`PATCH / called with body: ${body}`);
+    this.logger.log('PATCH / called with body:', JSON.stringify(body));
     return this.appService.findAll();
   }
-  @Delete(':id')
-  async remove(
-    @Param(new ValidationPipe()) params: RemoveTaskDto,
-  ): Promise<Task[]> {
-    await this.appService.remove(Number(params.id));
-    this.logger.log(`DELETE / called with id: ${params.id}`);
+  @Delete()
+  async remove(@Body(new ValidationPipe()) body: CUDTaskDto): Promise<Task[]> {
+    await this.appService.remove(Number(body.id), body.title);
+    this.logger.log('DELETE / called with body:', JSON.stringify(body));
     return this.appService.findAll();
   }
 }
