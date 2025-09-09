@@ -21,10 +21,9 @@ async function bootstrap() {
   });
 
   const config = new DocumentBuilder()
-    .setTitle('Cats example')
-    .setDescription('The cats API description')
+    .setTitle('Mock Todo API ')
+    .setDescription('API for managing tasks in a mock todo app')
     .setVersion('1.0')
-    .addTag('cats')
     .build();
   const documentFactory = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, documentFactory);
