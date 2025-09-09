@@ -17,7 +17,7 @@ import { Task } from './task.entity';
 import { CreateUpdateTaskDto } from './dto/create-update-task.dto';
 import { RemoveTaskDto } from './dto/remove-task.dto';
 
-@Controller()
+@Controller({ version: '1' })
 export class AppController {
   private readonly logger = new Logger(AppController.name);
   constructor(private readonly appService: AppService) {}
@@ -44,7 +44,9 @@ export class AppController {
     return this.appService.findAll();
   }
   @Delete(':id')
-  async remove(@Param() params: RemoveTaskDto): Promise<Task[]> {
+  async remove(
+    @Param(new ValidationPipe()) params: RemoveTaskDto,
+  ): Promise<Task[]> {
     await this.appService.remove(Number(params.id));
     this.logger.log(`DELETE / called with id: ${params.id}`);
     return this.appService.findAll();

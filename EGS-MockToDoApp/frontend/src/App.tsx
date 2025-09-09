@@ -11,7 +11,7 @@ function App() {
   const [editingId, setEditingId] = useState<number | null>(null);
 
   const findAllTodos = async () => {
-    const res = await fetch('http://localhost:4000');
+    const res = await fetch('http://localhost:4000/v1');
     const data = await res.json();
     setTodos(data);
   }
@@ -22,7 +22,7 @@ function App() {
       title: newTodo
     }
     try {
-      const res = await fetch('http://localhost:4000', {
+      const res = await fetch('http://localhost:4000/v1', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newTask),
@@ -40,7 +40,7 @@ function App() {
 
   const removeTodo = async (id: number) => {
     try {
-      const res = await fetch(`http://localhost:4000/${id}`, {
+      const res = await fetch(`http://localhost:4000/v1/${id}`, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
       });
@@ -57,10 +57,10 @@ function App() {
     setEditingId(id);
     setNewTodo(updatedTitle);
     try {
-      const res = await fetch('http://localhost:4000', {
+      const res = await fetch('http://localhost:4000/v1', {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id: id, title: updatedTitle })
+        body: JSON.stringify({ id: Number(id), title: updatedTitle })
       });
       if (!res.ok) {
         throw new Error('Failed to update todo');
@@ -116,7 +116,7 @@ function App() {
       </form>
 
       <ul className="list">
-        {todos.map((todo) => (
+        {todos?.map((todo) => (
           <li className="list-item">
             <span>{todo.title}</span>
             <div className="button-group">
