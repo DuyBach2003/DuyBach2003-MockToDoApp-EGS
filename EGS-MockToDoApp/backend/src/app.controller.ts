@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-base-to-string */
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
+
 import {
   Body,
   Controller,
@@ -11,9 +10,12 @@ import {
   Param,
   Patch,
   Post,
+  ValidationPipe,
 } from '@nestjs/common';
 import { AppService } from './app.service';
 import { Task } from './task.entity';
+import { CreateUpdateTaskDto } from './dto/create-update-task.dto';
+import { RemoveTaskDto } from './dto/remove-task.dto';
 
 @Controller()
 export class AppController {
@@ -26,21 +28,25 @@ export class AppController {
     return this.appService.findAll();
   }
   @Post()
-  async create(@Body() body: { id: number; title: string }): Promise<Task[]> {
+  async create(
+    @Body(new ValidationPipe()) body: CreateUpdateTaskDto,
+  ): Promise<Task[]> {
     await this.appService.create(body.id, body.title);
     this.logger.log(`POST / called with body: ${body}`);
     return this.appService.findAll();
   }
   @Patch()
-  async update(@Body() body: { id: number; title: string }): Promise<Task[]> {
+  async update(
+    @Body(new ValidationPipe()) body: CreateUpdateTaskDto,
+  ): Promise<Task[]> {
     await this.appService.update(body.id, body.title);
     this.logger.log(`PATCH / called with body: ${body}`);
     return this.appService.findAll();
   }
   @Delete(':id')
-  async remove(@Param('id') id: string): Promise<Task[]> {
-    await this.appService.remove(Number(id));
-    this.logger.log(`DELETE / called with id: ${id}`);
+  async remove(@Param() params: RemoveTaskDto): Promise<Task[]> {
+    await this.appService.remove(Number(params.id));
+    this.logger.log(`DELETE / called with id: ${params.id}`);
     return this.appService.findAll();
   }
 }
