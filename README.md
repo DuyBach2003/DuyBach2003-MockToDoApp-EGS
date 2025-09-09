@@ -25,3 +25,5 @@ Backend:
 Frontend:
 - cd frontend
 - npm start
+
+Note: Enter to http://localhost:4000/api to view and test the APIs directly
