@@ -2,7 +2,7 @@ import { ApiProperty, ApiSchema } from '@nestjs/swagger';
 import { IsInt, IsNotEmpty, IsString, Min, Max } from 'class-validator';
 @ApiSchema({
   description:
-    'Schema that defines the  fields used when creating, updating, or deleting a Task in the system.',
+    'Schema that defines the fields used when creating, updating, or deleting a Task in the system.',
 })
 export class CUDTaskDto {
   @IsNotEmpty()

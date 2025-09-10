@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  HttpCode,
   Logger,
   Patch,
   Post,
@@ -30,7 +31,7 @@ export class AppController {
     return this.appService.findAll();
   }
   @ApiResponse({
-    status: 200,
+    status: 201,
     description: 'The task has been successfully created.',
     type: CUDTaskDto,
   })
@@ -38,6 +39,7 @@ export class AppController {
   @Post()
   @ApiOperation({ summary: 'Create a new task' })
   @ApiBody({ type: CUDTaskDto })
+  @HttpCode(201)
   async create(@Body(new ValidationPipe()) body: CUDTaskDto): Promise<Task[]> {
     await this.appService.create(body.id, body.title);
     this.logger.log('POST / called with body:', JSON.stringify(body));
