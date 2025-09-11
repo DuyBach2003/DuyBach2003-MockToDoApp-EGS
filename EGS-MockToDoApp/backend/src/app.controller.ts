@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import {
   Body,
   Controller,
@@ -39,6 +40,19 @@ export class AppController {
     type: CreateDto,
   })
   @ApiResponse({ status: 500, description: 'Unable to create a new task.' })
+  @ApiResponse({
+    status: 400,
+    description: 'The format of the body is not appropritate.',
+    schema: {
+      example: {
+        message: [
+          "title should not be empty",
+        ],
+        error: "Bad Request",
+        statusCode: 400,
+      },
+    },
+  })
   @Post()
   @ApiOperation({ summary: 'Create a new task' })
   @ApiBody({ type: CreateDto })
@@ -50,6 +64,22 @@ export class AppController {
   }
 
   @ApiResponse({ status: 500, description: 'Unable to update the task.' })
+  @ApiResponse({
+    status: 400,
+    description: 'The format of the body is not appropritate.',
+    schema: {
+      example: {
+        message: [
+          "id must not be greater than 9007199254740991",
+          "id must not be less than -9007199254740991",
+          "id must be an integer number",
+          "id should not be empty",
+        ],
+        error: "Bad Request",
+        statusCode: 400,
+      },
+    },
+  })
   @ApiResponse({
     status: 200,
     description: 'The task has been successfully updated.',
@@ -68,9 +98,20 @@ export class AppController {
 
   @ApiResponse({ status: 500, description: 'Unable to delete the task.' })
   @ApiResponse({
-    status: 200,
-    description: 'The task has been successfully deleted.',
-    type: GetUpdateDeleteDto,
+    status: 400,
+    description: 'The format of the body is not appropritate.',
+    schema: {
+      example: {
+        message: [
+          "id must not be greater than 9007199254740991",
+          "id must not be less than -9007199254740991",
+          "id must be an integer number",
+          "id should not be empty",
+        ],
+        error: "Bad Request",
+        statusCode: 400,
+      },
+    },
   })
   @Delete()
   @ApiOperation({ summary: 'Delete a task' })
