@@ -19,7 +19,7 @@ import { CreateDto } from './dto/create-task.dto';
 @Controller({ path: 'tasks', version: '1' })
 export class AppController {
   private readonly logger = new Logger(AppController.name);
-  constructor(private readonly appService: AppService) {}
+  constructor(private readonly appService: AppService) { }
   @ApiResponse({
     status: 200,
     description: 'The found tasks.',
@@ -97,6 +97,11 @@ export class AppController {
   }
 
   @ApiResponse({ status: 500, description: 'Unable to delete the task.' })
+  @ApiResponse({
+    status: 200,
+    description: 'The task has been successfully deleted.',
+    type: GetUpdateDeleteDto,
+  })
   @ApiResponse({
     status: 400,
     description: 'The format of the body is not appropritate.',
