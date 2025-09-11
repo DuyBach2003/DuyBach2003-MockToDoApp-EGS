@@ -1,9 +1,9 @@
-import { Entity, Column, PrimaryColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('todos')
 export class Task {
-  @PrimaryColumn({ type: 'bigint' })
-  id: number;
+  @PrimaryGeneratedColumn()
+  id?: number;
   @Column()
   title: string;
 }

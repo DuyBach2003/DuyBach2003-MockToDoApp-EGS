@@ -15,8 +15,8 @@ export class AppService {
     return this.taskRepository.find();
   }
 
-  create(id: number, title: string) {
-    const task = this.taskRepository.create({ id, title });
+  create(title: string) {
+    const task = this.taskRepository.create({ title });
     this.logger.log(`Task named ${title} created successfully`);
     return this.taskRepository.save(task);
   }
