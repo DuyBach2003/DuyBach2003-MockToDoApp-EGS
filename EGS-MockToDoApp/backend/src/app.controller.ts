@@ -80,6 +80,17 @@ export class AppController {
       },
     },
   })
+    @ApiResponse({
+    status: 404,
+    description: 'The task can not be found.',
+    schema: {
+      example: {
+        message: "Task not found",
+        error: "Not Found",
+        statusCode: 404,
+      },
+    },
+  })
   @ApiResponse({
     status: 200,
     description: 'The task has been successfully updated.',
