@@ -12,7 +12,7 @@ import {
 } from '@nestjs/common';
 import { AppService } from './app.service';
 import { Task } from './task.entity';
-import { GetUpdateDeleteDto } from './dto/create-update-delete-task.dto';
+import { GetUpdateDeleteDto } from './dto/update-delete-task.dto';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateDto } from './dto/create-task.dto';
 @ApiTags('task')
