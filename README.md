@@ -12,7 +12,7 @@ CREATE USER postgres WITH PASSWORD '1234';
 GRANT ALL PRIVILEGES ON DATABASE "mockToDoApp" TO postgres;
 - Create the todos table:
 CREATE TABLE todos (
-    id BIGINT PRIMARY KEY,
+    id BIGSERIAL PRIMARY KEY,
     title VARCHAR(255) NOT NULL UNIQUE
 );
 
