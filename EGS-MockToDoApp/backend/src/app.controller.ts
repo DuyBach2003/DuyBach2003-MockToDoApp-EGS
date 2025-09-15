@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable prettier/prettier */
 import {
   Body,
@@ -6,15 +8,19 @@ import {
   Get,
   HttpCode,
   Logger,
+  Param,
+  ParseIntPipe,
   Patch,
   Post,
   ValidationPipe,
 } from '@nestjs/common';
 import { AppService } from './app.service';
 import { Task } from './task.entity';
-import { GetUpdateDeleteDto } from './dto/update-delete-task.dto';
+import { WithID } from './dto/with-id.dto';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { CreateDto } from './dto/create-task.dto';
+import { NoID } from './dto/no-id.dto';
+import { DeleteTodoResponseDto } from './dto/delete-todo.dto';
+import { DeleteResult } from 'typeorm';
 @ApiTags('task')
 @Controller({ path: 'tasks', version: '1' })
 export class AppController {
@@ -23,7 +29,7 @@ export class AppController {
   @ApiResponse({
     status: 200,
     description: 'The found tasks.',
-    type: GetUpdateDeleteDto,
+    type: WithID,
     isArray: true,
   })
   @ApiResponse({ status: 500, description: 'Unable to retrieve the tasks.' })
@@ -37,7 +43,7 @@ export class AppController {
   @ApiResponse({
     status: 201,
     description: 'The task has been successfully created.',
-    type: CreateDto,
+    type: WithID,
   })
   @ApiResponse({ status: 500, description: 'Unable to create a new task.' })
   @ApiResponse({
@@ -55,12 +61,15 @@ export class AppController {
   })
   @Post()
   @ApiOperation({ summary: 'Create a new task' })
-  @ApiBody({ type: CreateDto })
+  @ApiBody({ type: NoID })
   @HttpCode(201)
-  async create(@Body(new ValidationPipe()) body: CreateDto): Promise<Task> {
-    await this.appService.create(body.title);
-    this.logger.log('POST / called with body:', JSON.stringify(body));
-    return body;
+  async create(@Body(new ValidationPipe()) body: NoID): Promise<Task> {
+    const newTask = await this.appService.create(body.title);
+    this.logger.log('POST / called with body:', JSON.stringify(newTask));
+    return {
+      id: newTask.id,
+      title: newTask.title,
+    };
   }
 
   @ApiResponse({ status: 500, description: 'Unable to update the task.' })
@@ -80,7 +89,7 @@ export class AppController {
       },
     },
   })
-    @ApiResponse({
+  @ApiResponse({
     status: 404,
     description: 'The task can not be found.',
     schema: {
@@ -94,49 +103,42 @@ export class AppController {
   @ApiResponse({
     status: 200,
     description: 'The task has been successfully updated.',
-    type: GetUpdateDeleteDto,
+    type: WithID,
   })
-  @Patch()
+  @Patch(':id')
   @ApiOperation({ summary: 'Update an existing task' })
-  @ApiBody({ type: GetUpdateDeleteDto })
   async update(
-    @Body(new ValidationPipe()) body: GetUpdateDeleteDto,
+    @Param('id', ParseIntPipe) id: number, @Body(new ValidationPipe()) body: NoID,
   ): Promise<Task> {
-    await this.appService.update(body.id, body.title);
-    this.logger.log('PATCH / called with body:', JSON.stringify(body));
-    return body;
+    const updatedTask = await this.appService.update(id, body.title);
+    this.logger.log('PATCH / called with body:', JSON.stringify(updatedTask));
+    return { id: updatedTask.id, title: updatedTask.title };
   }
 
   @ApiResponse({ status: 500, description: 'Unable to delete the task.' })
   @ApiResponse({
     status: 200,
     description: 'The task has been successfully deleted.',
-    type: GetUpdateDeleteDto,
+    type: DeleteTodoResponseDto,
   })
   @ApiResponse({
-    status: 400,
-    description: 'The format of the body is not appropritate.',
+    status: 404,
+    description: 'The task can not be found.',
     schema: {
       example: {
-        message: [
-          "id must not be greater than 9007199254740991",
-          "id must not be less than -9007199254740991",
-          "id must be an integer number",
-          "id should not be empty",
-        ],
-        error: "Bad Request",
-        statusCode: 400,
+        message: "Task not found",
+        error: "Not Found",
+        statusCode: 404,
       },
     },
   })
-  @Delete()
+  @Delete(':id')
   @ApiOperation({ summary: 'Delete a task' })
-  @ApiBody({ type: GetUpdateDeleteDto })
   async remove(
-    @Body(new ValidationPipe()) body: GetUpdateDeleteDto,
-  ): Promise<Task> {
-    await this.appService.remove(Number(body.id), body.title);
-    this.logger.log('DELETE / called with body:', JSON.stringify(body));
-    return body;
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<DeleteResult> {
+    const deletedTask = await this.appService.remove(id);
+    this.logger.log('DELETE / called with message:', JSON.stringify(deletedTask));
+    return deletedTask;
   }
 }

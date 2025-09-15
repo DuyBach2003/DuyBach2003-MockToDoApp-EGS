@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -31,8 +32,14 @@ export class AppService {
     return this.taskRepository.save(task);
   }
 
-  async remove(id: number, title: string) {
-    await this.taskRepository.delete(id);
-    this.logger.log(`Task named ${title} removed successfully`);
+  async remove(id: number) {
+    const task = await this.taskRepository.findOneBy({ id });
+    if (!task) {
+      this.logger.error('Task not found');
+      throw new NotFoundException('Task not found');
+    }
+    const deletedTask = await this.taskRepository.delete(id);
+    this.logger.log(`Task with id ${id} removed successfully`);
+    return deletedTask;
   }
 }

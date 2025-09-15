@@ -36,10 +36,10 @@ function Tasks() {
 
   const removeTodo = async (id: number, title: string) => {
     try {
-      const res = await fetch(`http://localhost:4000/v1/tasks`, {
+      const res = await fetch(`http://localhost:4000/v1/tasks/${id}`, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id: Number(id), title: title })
+        body: JSON.stringify({ title: title })
       });
       if (!res.ok) {
         throw new Error('Failed to delete todo');
@@ -54,10 +54,10 @@ function Tasks() {
     setEditingId(id);
     setNewTodo(updatedTitle);
     try {
-      const res = await fetch('http://localhost:4000/v1/tasks', {
+      const res = await fetch(`http://localhost:4000/v1/tasks/${id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id: Number(id), title: updatedTitle })
+        body: JSON.stringify({ title: updatedTitle })
       });
       if (!res.ok) {
         throw new Error('Failed to update todo');

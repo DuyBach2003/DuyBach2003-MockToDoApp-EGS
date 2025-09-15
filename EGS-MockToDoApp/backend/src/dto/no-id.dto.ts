@@ -4,7 +4,7 @@ import { IsNotEmpty, IsString } from 'class-validator';
   description:
     'Schema that defines the fields used when creating a task in the system.',
 })
-export class CreateDto {
+export class NoID {
   @IsNotEmpty()
   @IsString()
   @ApiProperty({

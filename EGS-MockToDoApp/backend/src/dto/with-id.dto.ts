@@ -2,9 +2,9 @@ import { ApiProperty, ApiSchema } from '@nestjs/swagger';
 import { IsInt, IsNotEmpty, IsString, Min, Max } from 'class-validator';
 @ApiSchema({
   description:
-    'Schema that defines the fields used when updating or deleting a task in the system.',
+    'Schema that defines the fields used when getting all the tasks in the system.',
 })
-export class GetUpdateDeleteDto {
+export class WithID {
   @IsNotEmpty()
   @IsInt()
   @Min(Number.MIN_SAFE_INTEGER)
