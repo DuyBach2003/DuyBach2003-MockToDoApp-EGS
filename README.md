@@ -13,7 +13,8 @@ GRANT ALL PRIVILEGES ON DATABASE "mockToDoApp" TO postgres;
 - Create the todos table:
 CREATE TABLE todos (
     id BIGSERIAL PRIMARY KEY,
-    title VARCHAR(255) NOT NULL UNIQUE
+    title VARCHAR(255) NOT NULL UNIQUE,
+    status VARCHAR(255) NOT NULL
 );
 
 Step 4: Run the backend and frontend servers:
