@@ -1,8 +1,9 @@
+/* eslint-disable prettier/prettier */
 import { ApiProperty, ApiSchema } from '@nestjs/swagger';
-import { IsNotEmpty, IsString } from 'class-validator';
+import {IsNotEmpty, IsString } from 'class-validator';
 @ApiSchema({
   description:
-    'Schema that defines the fields used when creating a task in the system.',
+    'Schema that defines a task without an ID.',
 })
 export class NoID {
   @IsNotEmpty()

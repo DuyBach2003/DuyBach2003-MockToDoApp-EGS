@@ -15,7 +15,7 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { AppService } from './app.service';
-import { Task } from './task.entity';
+import { Task } from './entities/task.entity';
 import { WithID } from './dto/with-id.dto';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { NoID } from './dto/no-id.dto';
@@ -69,6 +69,7 @@ export class AppController {
     return {
       id: newTask.id,
       title: newTask.title,
+      status: newTask.status
     };
   }
 
@@ -79,8 +80,6 @@ export class AppController {
     schema: {
       example: {
         message: [
-          "id must not be greater than 9007199254740991",
-          "id must not be less than -9007199254740991",
           "id must be an integer number",
           "id should not be empty",
         ],
@@ -112,7 +111,48 @@ export class AppController {
   ): Promise<Task> {
     const updatedTask = await this.appService.update(id, body.title);
     this.logger.log('PATCH / called with body:', JSON.stringify(updatedTask));
-    return { id: updatedTask.id, title: updatedTask.title };
+    return { id: updatedTask.id, title: updatedTask.title, status: updatedTask.status};
+  }
+
+  @ApiResponse({ status: 500, description: 'Unable to update the task status.' })
+  @ApiResponse({
+    status: 400,
+    description: 'The format of the body is not appropritate.',
+    schema: {
+      example: {
+        message: [
+          "id must be an integer number",
+          "id should not be empty",
+        ],
+        error: "Bad Request",
+        statusCode: 400,
+      },
+    },
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'The task can not be found.',
+    schema: {
+      example: {
+        message: "Task not found",
+        error: "Not Found",
+        statusCode: 404,
+      },
+    },
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'The task status has been successfully updated.',
+    type: WithID,
+  })
+  @Patch(':id/status')
+  @ApiOperation({ summary: 'Update the status of an existing task' })
+  async updateStatus(
+    @Param('id', ParseIntPipe) id: number
+  ): Promise<Task> {
+    const updatedTask = await this.appService.updateStatus(id);
+    this.logger.log('PATCH / called with body:', JSON.stringify(updatedTask));
+    return { id: updatedTask.id, title: updatedTask.title, status: updatedTask.status };
   }
 
   @ApiResponse({ status: 500, description: 'Unable to delete the task.' })

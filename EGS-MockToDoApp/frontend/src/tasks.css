@@ -17,10 +17,18 @@
   padding: 8px;
   margin-left: 8px;
 }
+.lists-container {
+  display: flex;
+  gap: 100px; 
+  justify-content: space-between;
+}
 
 .list {
+  flex: 1;
+  min-width: 350px;
   list-style: none;
   padding: 0;
+  margin: 0;
 }
 
 .list-item {
@@ -39,8 +47,14 @@
   border: none;
   cursor: pointer;
 }
+.update-status-btn {
+  background: green;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
 .update-btn {
-  background: #4CAF50;
+  background: blue;
   color: white;
   border: none;
   cursor: pointer;
